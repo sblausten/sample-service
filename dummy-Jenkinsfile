@@ -13,7 +13,7 @@ pipeline {
             echo 'Testing..'
           },
           "Integration Test": {
-            echo 'Integration Test testing 1234567891011121314151617181920..'
+            echo 'Integration Test testing 123..'
           }
         )
       }
