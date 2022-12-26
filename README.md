@@ -64,3 +64,4 @@ absolute badge
 
 absolute raw badge
 ![Coverage badge](https://raw.github.com/sblausten/sample-service/main/docs/assets/coverage.svg)<img src="https://raw.github.com/sblausten/sample-service/main/docs/assets/coverage.svg">
+```yaml /n some: yaml /n test: 1```
