@@ -1,0 +1,37 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sample-service-4
+  title: Sample Service 4
+  namespace: test1
+  tags:
+    - test
+  description: |
+    A testing service for testing Backstage functionality. Configured for GitHub Actions, Sentry, AWS Lambda.
+  annotations:
+    jenkins.io/github-folder: 'roadie/sample-service'
+    # The Sentry organization is stored in the app-config.yaml of the Backstage instance.
+    sentry.io/project-slug: sample-service
+    aws.com/lambda-function-name: HelloWorld
+    aws.com/lambda-region: eu-west-1
+    backstage.io/techdocs-ref: url:s3
+    buildkite.com/project-slug: 'samroadie/demo-data'
+    qameta.io/allure-project: asdf    
+spec:
+  type: service
+  owner: dtuite
+  lifecycle: experimental
+  providesApis:
+    - test-api-1
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: test-api-1
+  description: The official Spotify REST API
+spec:
+  type: openapi
+  lifecycle: production
+  owner: test
+  definition:
+    $text: https://github.com/sblausten/sample-service/blob/main/api-spec.yaml

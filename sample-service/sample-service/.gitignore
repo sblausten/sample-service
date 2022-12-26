@@ -1,0 +1,8 @@
+*.swp
+node_modules
+.env
+*.log
+*.zip
+dist
+.DS_Store
+.idea/

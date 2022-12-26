@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - lts/*
+
+before_script: yarn run lint
+script: yarn run build
+
