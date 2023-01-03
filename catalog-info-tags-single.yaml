@@ -12,3 +12,14 @@ spec:
   type: service
   owner: sblausten
   lifecycle: experimental
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: tags-test-single-1
+  tags:
+    - test2
+spec:
+  type: service
+  owner: sblausten
+  lifecycle: production
