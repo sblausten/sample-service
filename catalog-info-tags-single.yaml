@@ -1,7 +1,8 @@
+---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: tags-test-single
+  name: test-1
   title: generated-component-tags-single
   annotations:
     github.com/project-slug: sblausten/sample-service
@@ -11,4 +12,4 @@ metadata:
 spec:
   type: service
   owner: sblausten
-  lifecycle: experimental
+  lifecycle: production
