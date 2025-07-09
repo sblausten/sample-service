@@ -8,6 +8,7 @@ metadata:
   annotations:
     travis-ci.com/repo-slug: RoadieHQ/sample-service
     'jenkins.io/job-full-name': roadie
+    backstage.io/techdocs-ref: dir:.
     backstage.io/kubernetes-id: sample-service
     github.com/project-slug: sblausten/sample-service
   tags:
