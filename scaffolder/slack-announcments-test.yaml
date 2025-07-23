@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: notify-slack-clients-test-1
   title: Notify Slack Clients Test
-  description: Send a notification to all client external slack channels
+  description: Send a notification to all client external slack channels. Very long description this one Very long description this one Very long description this one Very long description this one Very long description this one Very long description this one Very long description this one Very long description this one Very long description this one Very long description this one Very long description this one.  Very long description this one. 
 
 spec:
   owner: user:sam.blausten
