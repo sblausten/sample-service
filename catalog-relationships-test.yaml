@@ -33,3 +33,14 @@ spec:
   parent:
     - component:default/sam-test-comp-1
 ---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: sam-test-system-1
+spec:
+  owner: sblausten
+  parentOf:
+    - api:default/sam-test-api-1
+  parent:
+    - component:default/sam-test-comp-1
+---
