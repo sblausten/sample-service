@@ -44,3 +44,14 @@ spec:
   parent:
     - component:default/sam-test-comp-1
 ---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: sam-test-group-1
+spec:
+  type: test
+  parentOf:
+    - api:default/sam-test-api-1
+  parent:
+    - component:default/sam-test-comp-1
+---
