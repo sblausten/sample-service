@@ -5,6 +5,8 @@ metadata:
   name: open-pr-with-catalog-entry-2
   title: Onboard your service to Backstage
   description: Create a new PR with your service's details.
+    annotations: 
+      backstage.io/techdocs-ref: dir:.
 spec:
   owner: user:sblausten
   type: service
