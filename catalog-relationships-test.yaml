@@ -15,8 +15,8 @@ spec:
   type: openapi
   owner: sblausten
   lifecycle: experimental
-  definition:
-    $text: https://github.com/sblausten/sample-service/blob/main/api-spec.yaml
+  definition: |
+    abc
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
