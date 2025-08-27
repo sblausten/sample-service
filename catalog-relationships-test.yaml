@@ -50,8 +50,8 @@ metadata:
   name: sam-test-group-1
 spec:
   type: test
-  parentOf:
+  childOf:
     - api:default/sam-test-api-1
-  parent:
+  children:
     - component:default/sam-test-comp-1
 ---
