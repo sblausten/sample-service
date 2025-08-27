@@ -8,6 +8,17 @@ spec:
   lifecycle: experimental
 ---
 apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: sam-test-api-1
+spec:
+  type: openapi
+  owner: sblausten
+  lifecycle: experimental
+  definition:
+    $text: https://github.com/sblausten/sample-service/blob/main/api-spec.yaml
+---
+apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: sam-test-comp-2
@@ -17,14 +28,8 @@ spec:
   lifecycle: experimental
   providesApis:
     - sam-test-api-1
+  parentOf:
+    - api:default/sam-test-api-1
+  parent:
+    - component:default/sam-test-comp-1
 ---
-apiVersion: backstage.io/v1alpha1
-kind: API
-metadata:
-  name: sam-test-api-1
-spec:
-  type: openapi
-  owner: sblausten
-  lifecycle: experimental
-  definition: 
-    $text: https://github.com/sblausten/sample-service/blob/main/api-spec.yaml
