@@ -39,7 +39,7 @@ spec:
           ui:field: SelectFieldFromApi
           ui:options:
             # Call PagerDuty API via Backstage proxy
-            path: api/proxy/pagerduty/services
+            path: proxy/pagerduty/services
             # Select the services array from the response
             arraySelector: services
             # Use the service ID as the value
