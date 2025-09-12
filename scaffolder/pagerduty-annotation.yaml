@@ -3,11 +3,9 @@ kind: Template
 metadata:
   name: add-pagerduty-annotation
   title: Add PagerDuty Service Annotation to Entity
-  description: Adds a PagerDuty service-id annotation to an existing catalog entity
+  description: Adds a PagerDuty service-id annotation to an existing entity in the catalog
   tags:
     - pagerduty
-    - annotation
-    - catalog
 spec:
   owner: platform-team
   type: annotation
