@@ -2,7 +2,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: add-pagerduty-annotation-1
-  title: Add PagerDuty Service Annotation to Entity
+  title: Add PagerDuty Service Annotation
   description: Adds a PagerDuty service-id annotation to an existing entity in the catalog
   tags:
     - pagerduty
