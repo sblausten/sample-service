@@ -1,0 +1,79 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: add-pagerduty-annotation
+  title: Add PagerDuty Service Annotation to Entity
+  description: Adds a PagerDuty service-id annotation to an existing catalog entity
+  tags:
+    - pagerduty
+    - annotation
+    - catalog
+spec:
+  owner: platform-team
+  type: annotation
+
+  parameters:
+    - title: Entity Selection
+      required:
+        - entity
+      properties:
+        entity:
+          title: Select Entity
+          type: string
+          description: Choose the entity to add the PagerDuty annotation to
+          ui:field: EntityPicker
+          ui:options:
+            allowKinds:
+              - Component
+              - API
+              - Resource
+
+    - title: PagerDuty Configuration
+      required:
+        - pagerduty_service
+      properties:
+        pagerduty_service:
+          title: PagerDuty Service
+          type: string
+          description: Select the PagerDuty service to associate with this entity
+          ui:field: SelectFieldFromApi
+          ui:options:
+            # Call PagerDuty API via Backstage proxy
+            path: api/proxy/pagerduty/services
+            # Select the services array from the response
+            arraySelector: services
+            # Use the service ID as the value
+            valueSelector: id
+            # Display service name and summary for better UX
+            labelTemplate: '{{ item.name }} ({{ item.summary }})'
+
+  steps:
+    - id: parse-entity-ref
+      name: Parse Entity Reference
+      action: debug:log
+      input:
+        message: 'Adding PagerDuty service ${{ parameters.pagerduty_service }} to entity ${{ parameters.entity }}'
+
+    - id: create-catalog-fragment
+      name: Create Catalog Fragment with PagerDuty Annotation
+      action: http:backstage:request
+      input:
+        method: POST
+        path: api/catalog/fragments
+        headers:
+          'Content-Type': 'application/json'
+        body:
+          decorator:
+            entityRef: ${{ parameters.entity }}
+            fragment:
+              metadata:
+                annotations:
+                  pagerduty.com/service-id: ${{ parameters.pagerduty_service }}
+            source: 'scaffolder'
+
+  output:
+    links:
+      - title: View Entity in Catalog
+        url: ${{ steps['create-catalog-fragment'].output.body.fragment.metadata.annotations['backstage.io/view-url'] or '/catalog/' + parameters.entity }}
+      - title: PagerDuty Service Dashboard
+        url: 'https://your-org.pagerduty.com/services/${{ parameters.pagerduty_service }}'
