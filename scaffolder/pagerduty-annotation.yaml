@@ -59,7 +59,7 @@ spec:
       action: http:backstage:request
       input:
         method: POST
-        path: api/catalog/fragments
+        path: catalog/fragments
         headers:
           'Content-Type': 'application/json'
         body:
