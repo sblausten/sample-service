@@ -42,11 +42,11 @@ spec:
 #            labelTemplate: '{{ item.name }} ({{ item.summary }})'
 
   steps:
-#    - id: parse-entity-ref
-#      name: Parse Entity Reference
-#      action: debug:log
-#      input:
-#        message: 'Adding PagerDuty service ${{ parameters.pagerduty_service }} to entity ${{ parameters.entity }}'
+    - id: parse-entity-ref
+      name: Parse Entity Reference
+      action: debug:log
+      input:
+        message: 'Adding PagerDuty service ${{ parameters.pagerduty_service }} to entity ${{ parameters.entity }}'
 
     - id: create-catalog-fragment
       name: Create Catalog Fragment with PagerDuty Annotation
@@ -55,14 +55,14 @@ spec:
         method: POST
         path: catalog/fragments
         headers:
-          'Content-Type': 'application/json'
+          'content-type': 'application/json'
         body:
           decorator:
             entityRef: ${{ parameters.entity }}
             fragment:
               metadata:
                 annotations:
-                  pagerduty.com/service-id: 123
+                  pagerduty.com/service-id: ${{ parameters.pagerduty_service }}
               spec:
             source: 'scaffolder'
 
