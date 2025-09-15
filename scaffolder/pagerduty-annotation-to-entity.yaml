@@ -26,31 +26,27 @@ spec:
               - API
               - Resource
 
-    - title: PagerDuty Configuration
-      required:
-        - pagerduty_service
-      properties:
-        pagerduty_service:
-          title: PagerDuty Service
-          type: string
-          description: Select the PagerDuty service to associate with this entity
-          ui:field: SelectFieldFromApi
-          ui:options:
-            # Call PagerDuty API via Backstage proxy
-            path: proxy/pagerduty/services
-            # Select the services array from the response
-            arraySelector: services
-            # Use the service ID as the value
-            valueSelector: id
-            # Display service name and summary for better UX
-            labelTemplate: '{{ item.name }} ({{ item.summary }})'
+#    - title: PagerDuty Configuration
+#      required:
+#        - pagerduty_service
+#      properties:
+#        pagerduty_service:
+#          title: PagerDuty Service
+#          type: string
+#          description: Select the PagerDuty service to associate with this entity
+#          ui:field: SelectFieldFromApi
+#          ui:options:
+#            path: proxy/pagerduty/services
+#            arraySelector: services
+#            valueSelector: id
+#            labelTemplate: '{{ item.name }} ({{ item.summary }})'
 
   steps:
-    - id: parse-entity-ref
-      name: Parse Entity Reference
-      action: debug:log
-      input:
-        message: 'Adding PagerDuty service ${{ parameters.pagerduty_service }} to entity ${{ parameters.entity }}'
+#    - id: parse-entity-ref
+#      name: Parse Entity Reference
+#      action: debug:log
+#      input:
+#        message: 'Adding PagerDuty service ${{ parameters.pagerduty_service }} to entity ${{ parameters.entity }}'
 
     - id: create-catalog-fragment
       name: Create Catalog Fragment with PagerDuty Annotation
@@ -66,7 +62,7 @@ spec:
             fragment:
               metadata:
                 annotations:
-                  pagerduty.com/service-id: ${{ parameters.pagerduty_service }}
+                  pagerduty.com/service-id: 123
               spec:
             source: 'scaffolder'
 

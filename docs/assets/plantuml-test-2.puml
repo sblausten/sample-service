@@ -1,0 +1,74 @@
+@startuml CeloAI CPM AI (Component BFF)
+!include <C4/C4_Component>
+!include ../common/c4_common.puml
+remove @unlinked
+title Component Diagram for CeloAI CPM AI (Backend for Frontend)
+Container(web_app, "Web Application", "Blazor WebAssembly", "Interactive web interface for AI-powered process management.")
+Container(native_app, "Native Application", "Blazor Hybrid/.NET MAUI", "Native desktop and mobile applications.")
+Container(api_service, "AI API Service", "ASP.NET Core Web API", "Core AI service providing chat completions and process generation.")
+ContainerDb(session_cache, "Session Cache", "Distributed Memory Cache", "Stores user session data and authentication state.")
+System_Ext(azure_blob, "Azure Blob Storage", "Static assets and prompt template images.", $tags="duplicateExternalSystem")
+Container_Boundary(bff_service, "Backend for Frontend (BFF)") {
+    Component(authentication_middleware, "Authentication Middleware", "ASP.NET Core + Duende BFF", "Handles OpenID Connect authentication, cookie management, and session state.")
+    Component(authorization_middleware, "Authorization Middleware", "ASP.NET Core Authorization", "Validates user permissions and enforces access policies.")
+    Component(yarp_proxy, "YARP Reverse Proxy", "Yet Another Reverse Proxy", "High-performance reverse proxy with intelligent routing and request transformation.")
+
+    Component(token_factory, "Token Factory", "Custom Token Service", "Manages access tokens, refresh tokens, and interop token generation for service-to-service communication.")
+    Component(product_instance_resolver, "Product Instance Resolver", "Custom Service", "Resolves product instances and tenant context from request headers and company information.")
+    Component(company_affiliation_processor, "Company Affiliation Processor", "FastEndpoints Preprocessor", "Validates company affiliation and ensures proper tenant isolation.")
+
+    Component(auth_endpoints, "Authentication Endpoints", "FastEndpoints Controllers", "Provides login, logout, user info, and session management endpoints.")
+    Component(tenant_endpoints, "Tenant Management Endpoints", "FastEndpoints Controllers", "Handles company discovery, storage instances, and product instance validation.")
+    Component(debug_endpoints, "Debug Endpoints", "FastEndpoints Controllers", "Development and diagnostic endpoints for debugging and monitoring.")
+
+    Component(request_transformer, "Request Transformer", "YARP Transform Component", "Transforms requests with proper headers, authentication tokens, and routing context.")
+    Component(response_optimizer, "Response Optimizer", "YARP Transform Component", "Optimizes responses with caching headers, security headers, and content optimization.")
+    Component(cors_handler, "CORS Handler", "ASP.NET Core CORS", "Manages cross-origin resource sharing policies for different service endpoints.")
+}
+' Client interactions
+Rel(web_app, authentication_middleware, "Authenticates and makes API calls", "HTTPS/Cookies")
+Rel(native_app, authentication_middleware, "Authenticates and makes API calls", "HTTPS/Cookies")
+' Authentication flow
+Rel(authentication_middleware, cpm_auth_service, "OpenID Connect authentication flow", "HTTPS/OAuth2")
+Rel(authentication_middleware, session_cache, "Stores/retrieves session data", "In-Memory")
+Rel(authentication_middleware, authorization_middleware, "Forwards authenticated requests", "")
+' Authorization and routing
+Rel(authorization_middleware, company_affiliation_processor, "Validates company context", "")
+Rel(company_affiliation_processor, product_instance_resolver, "Resolves tenant context", "")
+Rel(product_instance_resolver, cpm_ops_service, "Queries product instances", "JSON/HTTPS")
+' Token management
+Rel(authorization_middleware, token_factory, "Requests access tokens", "")
+Rel(token_factory, cpm_auth_service, "Refreshes tokens via OpenID Connect", "JSON/HTTPS")
+Rel(token_factory, cpm_ops_service, "Generates interop tokens", "JSON/HTTPS")
+' Endpoint routing
+Rel(authorization_middleware, auth_endpoints, "Routes authentication requests", "")
+Rel(authorization_middleware, tenant_endpoints, "Routes tenant management requests", "")
+Rel(authorization_middleware, debug_endpoints, "Routes debug requests", "")
+Rel(authorization_middleware, yarp_proxy, "Routes API requests", "")
+' Endpoint operations
+Rel(auth_endpoints, token_factory, "Manages authentication tokens", "")
+Rel(tenant_endpoints, cpm_ops_service, "Queries company and storage data", "JSON/HTTPS")
+Rel(tenant_endpoints, product_instance_resolver, "Validates product instances", "")
+' YARP proxy operations
+Rel(yarp_proxy, request_transformer, "Transforms outbound requests", "")
+Rel(yarp_proxy, response_optimizer, "Optimizes inbound responses", "")
+Rel(yarp_proxy, cors_handler, "Handles CORS policies", "")
+' Request transformation
+Rel(request_transformer, token_factory, "Injects authorization headers", "")
+Rel(request_transformer, product_instance_resolver, "Adds tenant context", "")
+' Backend service routing
+Rel(yarp_proxy, api_service, "Routes /api/ai/* requests", "JSON/HTTPS")
+Rel(yarp_proxy, cpm_service_search, "Routes /api/search/* requests", "JSON/HTTPS")
+Rel(yarp_proxy, azure_blob, "Routes /prompt-template-images/* requests", "HTTPS")
+Rel(yarp_proxy, cpm_auth_service, "Routes /api/auth/* requests", "JSON/HTTPS")
+Rel(yarp_proxy, cpm_ops_service, "Routes /api/operation/* requests", "JSON/HTTPS")
+' Response optimization
+Rel(response_optimizer, azure_blob, "Applies long-term caching for static assets", "Cache-Control Headers")
+' Layout optimizations
+Lay_R(authentication_middleware, authorization_middleware)
+Lay_R(authorization_middleware, yarp_proxy)
+Lay_D(token_factory, product_instance_resolver)
+Lay_D(auth_endpoints, tenant_endpoints)
+Lay_R(request_transformer, response_optimizer)
+SHOW_LEGEND()
+@enduml

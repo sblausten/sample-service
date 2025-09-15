@@ -1,0 +1,52 @@
+!include <C4/C4_Context>
+!include <bootstrap1.13.1/bootstrap>
+Person(cpm_navigator_user, "Navigator User", "A user of the CPM Process Navigator.")
+Person(cpm_user, "CPM User", "A user of any of the CPM apps/services")
+Person(cpm_admin, "CPM Admin User", "A user of CPM Apps and services with admin privileges.")
+Person(developer, "Developer", "A developer of CPM Services.")
+Person(customer_admin, "Admin User", "Administrator of the Customer.")
+System_Ext(cpm_navigator, "CPM Process Navigator", "The CPM Process Navigator.")
+System_Ext(cpm_admin_app, "CPM Admin App", "The application for managing the admin configuration.")
+System_Ext(cpm_teams_app, "CPM Teams App", "The CPM Teams App.")
+System_Ext(cpm_designer, "CPM Process Designer", "The CPM Process Designer.")
+System_Ext(cpm_ops_service, "CPM Operation Service", "Stores metadata of provisioned product instances.")
+System_Ext(cpm_auth_service, "CPM Authentication Service", "Handles authentication and issues access tokens.")
+System_Ext(cpm_generic_application, "CPM Application/Service", "An application or service within the CPM ecosystem (Example: CPM Process Navigator).")
+System_Ext(mail_server, "Mail Server", "A SMTP service provider.")
+System_Ext(cpm_mail_service, "CPM Mail Service", "Sends mails to users.")
+System_Ext(kubernetes, "Kubernetes", "Hosts the CPM applications and services.")
+System_Ext(cpm_admin_app, "CPM Admin App", "The CPM Admin App.")
+System_Ext(reporting_service_api, "Reporting API", "API of Reporting service.")
+System_Ext(cpm_service_graphic, "CPM Graphic Service", "Handle diagram images creation")
+System_Ext(cpm_subscriptions_service, "CPM Subscriptions Service", "Stores subscriptions to CPM Process Designer elements")
+System_Ext(cpm_mail_service, "CPM Mail Service", "Sends emails to users")
+System_Ext(cpm_service_imagecache, "Image Cache Service", "Resizes and caches images from the Designer")
+System_Ext(cpm_service_webjobs, "Webjob Scheduler", "Schedules validity state changes of objects at specified times")
+System_Ext(tasks_assistant, "Tasks Assistant", "Tracks which employee has reviewed a newly released guideline")
+System_Ext(cpm_service_openai, "CPM OpenAI Service", "Open AI service for text generation and processing")
+System_Ext(cpm_designer_leanix_connector, "Make Custom App", "Set of modules in make.com and Celonis action flows to interact with limited Designer API endpoints, focused on syncing data with LeanIX")
+System_Ext(cpm_service_livedata, "Live Data Service", "Connects to the Celonis intelligence API to provide process mining data")
+System_Ext(cpm_service_visio, "Visio Service", "Synchronizes data from Microsoft Visio with the Designer")
+System_Ext(enable_now_service, "Enable Now Service", "Connects with SAP Enable Now to import/synchronize training elements")
+System_Ext(cpm_service_uniqueId, "CPM UniqueID Service", "Generates and manages unique IDs for CPM elements.")
+System_Ext(cpm_service_solman_interface, "CPM Solman Interface Service", "Integrates with SAP Solution Manager.")
+System_Ext(cpm_live_data_provider, "CPM Celonis Live Data Provider", "Retrieve live data from Celonis Intelligence API.")
+System_Ext(cpm_live_data, "CPM Live Data Service", "A service gateway connecting with the available live data providers.")
+System_Ext(cpm_app_canvas, "CPM Canvas App", "Displays process data in a visual format.")
+System_Ext(cpm_layouter, "CPM Layouter Library", "Provides the layouting for old process and hierarchy diagrams")
+System_Ext(cpm_service_search, "CPM Search Service", "Provides search capabilities for process data")
+' ===================================================================
+' ELEMENT TAGS
+' ===================================================================
+AddElementTag("duplicateExternalSystem", $bgColor="#E0E0E0", $fontColor="#333333", $borderColor="#B0B0B0", $legendText="Duplicate of existing external system for improved layout")
+AddElementTag("duplicateContainerDb", $bgColor="#E6F2FF", $fontColor="#003366", $borderColor="#99CCFF", $legendText="Duplicate of existing container DB for improved layout")
+AddElementTag("anonymous", $bgColor="#D3D3D3", $fontColor="#000000", $borderColor="#A9A9A9", $legendText="Allows anonymous access")
+' ===================================================================
+' REUSABLE COMPONENT MACROS
+' ===================================================================
+' Macro for creating standardized provisioning controller components
+' Usage: SimpleProvisioningComponent(simple_provisioning)
+!define SimpleProvisioningComponent(alias) Component(alias, "Simple Provisioning", "ASP.NET Core API Controller", "Handles provisioning requests and creates new product instances or other resources.")
+' Macro for creating ASP.NET Core Authorization middleware components
+' Usage: AspNetAuthorizationComponent(authorization_middleware, "Validates JWT bearer token.")
+!define AspNetAuthorizationComponent(alias, description) Component(alias, "ASP.NET Core Authorization", "Default ASP.NET Core authorization middleware", description)
