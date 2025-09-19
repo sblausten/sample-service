@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: add-pagerduty-annotation-example
-  title: Add PagerDuty Service Annotation
-  description: Adds a PagerDuty service-id annotation to an existing entity
+  name: annotation-fragment-with-pr
+  title: Add PagerDuty Service Annotation with PR
+  description: Adds a PagerDuty service-id annotation to an existing entity with fragment and optional pr
   tags:
     - pagerduty
 spec:
