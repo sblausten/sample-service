@@ -1,7 +1,7 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: add-pagerduty-annotation-1
+  name: add-pagerduty-annotation-example
   title: Add PagerDuty Service Annotation
   description: Adds a PagerDuty service-id annotation to an existing entity
   tags:
@@ -26,20 +26,20 @@ spec:
               - API
               - Resource
 
-#    - title: PagerDuty Configuration
-#      required:
-#        - pagerduty_service
-#      properties:
-#        pagerduty_service:
-#          title: PagerDuty Service
-#          type: string
-#          description: Select the PagerDuty service to associate with this entity
-#          ui:field: SelectFieldFromApi
-#          ui:options:
-#            path: proxy/pagerduty/services
-#            arraySelector: services
-#            valueSelector: id
-#            labelTemplate: '{{ item.name }} ({{ item.summary }})'
+    - title: PagerDuty Configuration
+      required:
+        - pagerduty_service
+      properties:
+        pagerduty_service:
+          title: PagerDuty Service
+          type: string
+          description: Select the PagerDuty service to associate with this entity
+          ui:field: SelectFieldFromApi
+          ui:options:
+            path: proxy/pagerduty/services
+            arraySelector: services
+            valueSelector: id
+            labelTemplate: '{{ item.name }} ({{ item.summary }})'
 
   steps:
     - id: parse-entity-ref
