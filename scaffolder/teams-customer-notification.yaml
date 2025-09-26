@@ -38,44 +38,43 @@ spec:
           sendToAllClients:
             const: false
       then:
-        properties:
-          slackChannel:
-            title: Slack Channel
-            type: string
-            ui:field: SelectFieldFromApi
-            ui:options:
-              title: Slcah channel selection
-              description: Select the slack channel to send the notification to
-              path: "catalog/entities"
-              params:
-                filter: 'kind=resource,spec.type=tenant,metadata.labels.slack-channel-id'
-              labelSelector: 'metadata.name'
-              valueSelector: 'metadata.labels["slack-channel-id"]'
-            dependencies:
-              platform:
-                oneOf:
-                  - properties:
-                      platform:
-                        enum: [slack, both]
-          
-          teamsChannel:
-            title: Teams Channel
-            type: string
-            ui:field: SelectFieldFromApi
-            ui:options:
-              title: Teams channel selection
-              description: Select the teams channel to send the notification to
-              path: "catalog/entities"
-              params:
-                filter: 'kind=resource,spec.type=tenant,metadata.labels.ms-teams-channel-id'
-              labelSelector: 'metadata.name'
-              valueSelector: 'metadata.labels["ms-teams-channel-id"]'
-            dependencies:
-              platform:
-                oneOf:
-                  - properties:
-                      platform:
-                        enum: [teams, both]
+        allOf:
+          - if:
+              properties:
+                platform:
+                  enum: [slack, both]
+            then:
+              properties:
+                slackChannel:
+                  title: Slack Channel
+                  type: string
+                  ui:field: SelectFieldFromApi
+                  ui:options:
+                    title: Slack channel selection
+                    description: Select the slack channel to send the notification to
+                    path: "catalog/entities"
+                    params:
+                      filter: 'kind=resource,spec.type=tenant,metadata.labels.slack-channel-id'
+                    labelSelector: 'metadata.name'
+                    valueSelector: 'metadata.labels["slack-channel-id"]'
+          - if:
+              properties:
+                platform:
+                  enum: [teams, both]
+            then:
+              properties:
+                teamsChannel:
+                  title: Teams Channel
+                  type: string
+                  ui:field: SelectFieldFromApi
+                  ui:options:
+                    title: Teams channel selection
+                    description: Select the teams channel to send the notification to
+                    path: "catalog/entities"
+                    params:
+                      filter: 'kind=resource,spec.type=tenant,metadata.labels.ms-teams-channel-id'
+                    labelSelector: 'metadata.name'
+                    valueSelector: 'metadata.labels["ms-teams-channel-id"]'
 
     - title: Message
       required:
