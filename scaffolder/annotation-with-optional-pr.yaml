@@ -60,7 +60,7 @@ spec:
           title: Pull Request Description
           type: string
           description: Description for the pull request
-          default: 'This PR adds the PagerDuty service annotation to the catalog-info.yaml file'
+          default: 'This PR adds the PagerDuty service annotation to the catalog-info.yaml file.'
           ui:widget: textarea
           ui:options:
             showIfValue:
