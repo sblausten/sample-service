@@ -25,7 +25,7 @@ spec:
             - Both Slack & Teams
           default: both
 
-    - title: Channel
+    - title: Client selection
       properties:
         sendToAllClients:
           title: Send to All Clients
@@ -44,6 +44,8 @@ spec:
             type: string
             ui:field: SelectFieldFromApi
             ui:options:
+              title: Slcah channel selection
+              description: Select the slack channel to send the notification to
               path: "catalog/entities"
               params:
                 filter: 'kind=resource,spec.type=tenant,metadata.labels.slack-channel-id'
@@ -61,6 +63,8 @@ spec:
             type: string
             ui:field: SelectFieldFromApi
             ui:options:
+              title: Teams channel selection
+              description: Select the teams channel to send the notification to
               path: "catalog/entities"
               params:
                 filter: 'kind=resource,spec.type=tenant,metadata.labels.ms-teams-channel-id'
