@@ -31,32 +31,100 @@ spec:
           type: string
           description: The ID of the client to post the notification
   steps:
-    - id: 'ms-teams-auth-code'
-      name: 'Get Microsoft Teams Authorization Code'
-      action: 'http:backstage:request'
-      input:
-        method: 'GET'
-        path: 'proxy/ms-teams-auth/common/oauth2/v2.0/authorize'
-        headers:
-          content-type: 'application/x-www-form-urlencoded'
-        body:
-          client_id: ${{ parameters.clientId }}
-          redirect_uri: 'http://localhost'
-          response_type: 'code'
-          response_mode: 'query'
-          scope: 'https://graph.microsoft.com/.default'
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: teams-oauth-device-flow
+  title: Teams Notification with Device Code OAuth
+  description: Send Teams messages using device code authentication flow
+spec:
+  owner: platform-team
+  type: service
 
-    - id: 'send-teams-notification-all-clients'
-      name: 'Send Teams Notification to All Clients'
-      action: 'http:backstage:request'
+  parameters:
+    - title: Component Information
+      required:
+        - name
+        - teamId
+        - channelId
+      properties:
+        name:
+          title: Component Name
+          type: string
+        teamId:
+          title: Teams Team ID
+          type: string
+        channelId:
+          title: Teams Channel ID
+          type: string
+
+  steps:
+    # Step 1: Initiate OAuth device code flow
+    - id: start-oauth
+      name: Start OAuth Authentication
+      action: http:backstage:request
       input:
-        method: 'POST'
-        path: '/api/msgraph-proxy/api/teams/${{ parameters.teamId }}/channels/${{ parameters.channelId }}/messages'
+        method: POST
+        url: '${{ backend.baseUrl }}/api/msgraph-proxy/oauth/device-code'
         headers:
-          content-type: 'application/json'
-          X-Required-Scopes: 'ChannelMessage.Send,Team.ReadBasic.All'
-          authorization: 'Bearer ${{ steps["ms-teams-auth"].output.body.access_token }}'
+          'Content-Type': 'application/json'
+        body:
+          scopes:
+            - https://graph.microsoft.com/ChannelMessage.Send
+            - https://graph.microsoft.com/Team.ReadBasic.All
+            - https://graph.microsoft.com/Channel.ReadBasic.All
+
+    # Step 2: Display authentication instructions
+    - id: show-instructions
+      name: Authentication Instructions
+      action: debug:log
+      input:
+        message: |
+          🔐 OAuth Authentication Required:
+          
+          Please complete the following steps:
+          1. Visit: ${{ steps.start-oauth.output.verification_uri }}
+          2. Enter code: ${{ steps.start-oauth.output.user_code }}
+          3. Sign in with your Microsoft account
+          4. Consent to the requested permissions
+          
+          You have ${{ steps.start-oauth.output.expires_in }} seconds to complete authentication.
+          The template will continue once you've authenticated...
+
+    # Step 3: Poll for access token (with retry logic)
+    - id: wait-for-auth-1
+      name: Wait for Authentication (Attempt 1)
+      action: http:backstage:request
+      input:
+        method: POST
+        url: '${{ backend.baseUrl }}/api/msgraph-proxy/oauth/token'
+        headers:
+          'Content-Type': 'application/json'
+        body:
+          device_code: ${{ steps.start-oauth.output.device_code }}
+
+    # Step 4: Send Teams message with obtained token
+    - id: send-teams-message
+      name: Send Teams Notification
+      action: http:backstage:request
+      input:
+        method: POST
+        url: '${{ backend.baseUrl }}/api/msgraph-proxy/api/teams/${{ parameters.teamId }}/channels/${{ parameters.channelId }}/messages'
+        headers:
+          'Authorization': 'Bearer ${{ steps.wait-for-auth-1.output.access_token }}'
+          'Content-Type': 'application/json'
+          'X-Required-Scopes': 'ChannelMessage.Send,Team.ReadBasic.All'
         body:
           body:
-            contentType: 'text'
-            content: 'Sam testing 123'
+            content: |
+              🎉 **Component Created with OAuth Authentication!**
+              
+              **Component:** ${{ parameters.name }}
+              **Created by:** ${{ user.entity.metadata.name }}
+              **Authentication:** Device Code Flow ✅
+              
+              This message was sent using user-delegated permissions!
+            contentType: html
+
+  output:
+    message: 'Teams notification sent successfully with OAuth authentication!'
