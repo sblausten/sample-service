@@ -32,7 +32,7 @@ spec:
       action: http:backstage:request
       input:
         method: POST
-        url: 'api/msgraph-proxy/oauth/device-code'
+        path: 'api/msgraph-proxy/oauth/device-code'
         headers:
           'Content-Type': 'application/json'
         body:
@@ -64,7 +64,7 @@ spec:
       action: http:backstage:request
       input:
         method: POST
-        url: 'api/msgraph-proxy/oauth/token'
+        path: 'api/msgraph-proxy/oauth/token'
         headers:
           'Content-Type': 'application/json'
         body:
@@ -76,7 +76,7 @@ spec:
       action: http:backstage:request
       input:
         method: POST
-        url: 'api/msgraph-proxy/api/teams/${{ parameters.teamId }}/channels/${{ parameters.channelId }}/messages'
+        path: 'api/msgraph-proxy/api/teams/${{ parameters.teamId }}/channels/${{ parameters.channelId }}/messages'
         headers:
           'Authorization': 'Bearer ${{ steps.wait-for-auth-1.output.access_token }}'
           'Content-Type': 'application/json'
