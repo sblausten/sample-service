@@ -1,39 +1,6 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: client-notifications-test-2
-  title: Teams Notifications - Sam test
-  description: Send a notification
-
-spec:
-  owner: group:roadiehq/engineering
-  type: Notification
-
-  parameters:
-    - title: Teams Notification
-      required:
-        - teamId
-        - channelId
-        - clientId
-      properties:
-        teamId:
-          title: Teams Team ID
-          type: string
-          description: The ID of the Microsoft Teams team to notify
-          ui:help: 'Find this in Teams URL or use the Graph API'
-        channelId:
-          title: Teams Channel ID
-          type: string
-          description: The ID of the channel to post the notification
-          ui:help: 'Find this in Teams URL or use the Graph API'
-        clientId:
-          title: Teams Client ID
-          type: string
-          description: The ID of the client to post the notification
-  steps:
-apiVersion: scaffolder.backstage.io/v1beta3
-kind: Template
-metadata:
   name: teams-oauth-device-flow
   title: Teams Notification with Device Code OAuth
   description: Send Teams messages using device code authentication flow
