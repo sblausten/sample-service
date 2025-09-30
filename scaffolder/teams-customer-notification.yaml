@@ -111,17 +111,37 @@ spec:
           filter: 'kind=resource,spec.type=tenant,metadata.labels.ms-teams-channel-id'
           fields: 'metadata.name,metadata.labels.ms-teams-channel-id'
 
+    - id: 'ms-teams-auth-code'
+      name: 'Get Microsoft Teams Authorization Code'
+      if: ${{ parameters.platform == 'teams' or parameters.platform == 'both' }}
+      action: 'http:backstage:request'
+      input:
+        method: 'GET'
+        path: 'proxy/ms-teams-auth/common/oauth2/v2.0/authorize'
+        headers:
+          content-type: 'application/x-www-form-urlencoded'
+        body:
+          client_id: '${{ secrets.MS_TEAMS_CLIENT_ID }}'
+          redirect_uri: '${{ secrets.MS_TEAMS_REDIRECT_URI }}'
+          response_type: 'code'
+          response_mode: 'query'
+          scope: 'https://graph.microsoft.com/.default'
+
+
     - id: 'ms-teams-auth'
       name: 'Authenticate with Microsoft Teams'
       if: ${{ parameters.platform == 'teams' or parameters.platform == 'both' }}
       action: 'http:backstage:request'
       input:
         method: 'POST'
-        path: 'proxy/ms-teams-auth'
+        path: 'proxy/ms-teams-auth/common/oauth2/v2.0/token'
         headers:
-          content-type: 'application/json'
+          content-type: 'application/x-www-form-urlencoded'
         body:
-          scope: 'https://graph.microsoft.com/ChannelMessage.Send'
+          client_id: '${{ secrets.MS_TEAMS_CLIENT_ID }}'
+          client_secret: '${{ secrets.MS_TEAMS_CLIENT_SECRET }}'
+          scope: 'https://graph.microsoft.com/.default'
+          grant_type: 'authorization_code'
 
     - id: 'send-slack-notification-all-clients'
       name: 'Send Slack Notification to All Clients'
@@ -148,9 +168,10 @@ spec:
       action: 'http:backstage:request'
       input:
         method: 'POST'
-        path: 'proxy/ms-teams/me/chats/${{ each.value.metadata.labels["ms-teams-channel-id"] }}/messages'
+        path: '/api/msgraph-proxy/api/teams/50fe61f2-ca2e-4e5a-8f1d-e5d4fb4eaf42/channels/${{ each.value.metadata.labels["ms-teams-channel-id"] }}/messages'
         headers:
           content-type: 'application/json'
+          X-Required-Scopes: 'ChannelMessage.Send,Team.ReadBasic.All'
           authorization: 'Bearer ${{ steps["ms-teams-auth"].output.access_token }}'
         body:
           body:

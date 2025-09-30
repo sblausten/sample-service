@@ -1,0 +1,62 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: client-notifications-test-2
+  title: Teams Notifications - Sam test
+  description: Send a notification
+
+spec:
+  owner: group:roadiehq/engineering
+  type: Notification
+
+  parameters:
+    - title: Teams Notification
+      required:
+        - teamId
+        - channelId
+        - clientId
+      properties:
+        teamId:
+          title: Teams Team ID
+          type: string
+          description: The ID of the Microsoft Teams team to notify
+          ui:help: 'Find this in Teams URL or use the Graph API'
+        channelId:
+          title: Teams Channel ID
+          type: string
+          description: The ID of the channel to post the notification
+          ui:help: 'Find this in Teams URL or use the Graph API'
+        clientId:
+          title: Teams Client ID
+          type: string
+          description: The ID of the client to post the notification
+  steps:
+    - id: 'ms-teams-auth-code'
+      name: 'Get Microsoft Teams Authorization Code'
+      action: 'http:backstage:request'
+      input:
+        method: 'GET'
+        path: 'proxy/ms-teams-auth/common/oauth2/v2.0/authorize'
+        headers:
+          content-type: 'application/x-www-form-urlencoded'
+        body:
+          client_id: ${{ parameters.clientId }}
+          redirect_uri: 'http://localhost'
+          response_type: 'code'
+          response_mode: 'query'
+          scope: 'https://graph.microsoft.com/.default'
+
+    - id: 'send-teams-notification-all-clients'
+      name: 'Send Teams Notification to All Clients'
+      action: 'http:backstage:request'
+      input:
+        method: 'POST'
+        path: '/api/msgraph-proxy/api/teams/${{ parameters.teamId }}/channels/${{ parameters.channelId }}/messages'
+        headers:
+          content-type: 'application/json'
+          X-Required-Scopes: 'ChannelMessage.Send,Team.ReadBasic.All'
+          authorization: 'Bearer ${{ steps["ms-teams-auth"].output.body.access_token }}'
+        body:
+          body:
+            contentType: 'text'
+            content: 'Sam testing 123'
