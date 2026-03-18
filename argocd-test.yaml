@@ -1,14 +1,13 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: test-name-change
-  title: Name change test
+  name: argocd-test-entity
   annotations:
     github.com/project-slug: sblausten/sample-service
     backstage.io/techdocs-ref: dir:.
-    roadie.io/techdocs-builder: 'ci'
+    argocd/app-name: guestbook
   tags:
-    - test
+    - argocd
 spec:
   type: service
   owner: sblausten
