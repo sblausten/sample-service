@@ -3,7 +3,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: azure-arm-integration-test
-  title: Azure ARM Integration Test
+  title: Azure ARM Integration Test 2
   description: >
     Tests the azure-arm integration by fetching Azure resource information via
     the ARM REST API. Requires AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, and
