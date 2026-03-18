@@ -32,7 +32,7 @@ spec:
       name: List Azure Resources
       action: http:backstage:request
       input:
-        method: GET
+        method: POST
         path: >-
           /integrations/azure-arm/request
         headers:
