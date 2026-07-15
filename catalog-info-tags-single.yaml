@@ -1,12 +1,11 @@
 apiVersion: backstage.io/v1alpha1
-kind: Component
+kind: System
 metadata:
-  name: tags-test-single
+  name: system-test
   title: generated-component-tags-single
   description: test
   annotations:
-    github.com/project-slug: roadiehq/sample-service
+    github.com/project-slug: sblausten/sample-service
 spec:
-  type: service
   owner: group:default/engineering
-  lifecycle: experimental
+  domain: domain:default/test1
